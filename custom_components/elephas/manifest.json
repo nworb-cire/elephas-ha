@@ -1,6 +1,7 @@
 {
   "domain": "elephas",
   "name": "Elephas Projector",
+  "after_dependencies": ["network"],
   "codeowners": ["@nworb-cire"],
   "config_flow": true,
   "dhcp": [
