@@ -1,0 +1,16 @@
+{
+  "domain": "elephas",
+  "name": "Elephas Projector",
+  "codeowners": ["@nworb-cire"],
+  "config_flow": true,
+  "dhcp": [
+    {"macaddress": "8C7AB3*"},
+    {"registered_devices": true}
+  ],
+  "documentation": "https://github.com/nworb-cire/elephas-ha",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/nworb-cire/elephas-ha/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

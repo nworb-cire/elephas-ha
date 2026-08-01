@@ -1,0 +1,35 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "This projector is already configured.",
+      "cannot_connect": "Unable to connect to the projector."
+    },
+    "error": {
+      "cannot_connect": "Unable to connect. Make sure the projector is powered on and reachable."
+    },
+    "step": {
+      "dhcp_confirm": {
+        "description": "Set up the Elephas projector at {host}?",
+        "title": "Discovered Elephas projector"
+      },
+      "reconfigure": {
+        "data": {"host": "Host"},
+        "description": "Update the projector network address.",
+        "title": "Reconfigure Elephas projector"
+      },
+      "user": {
+        "data": {"host": "Host"},
+        "description": "Enter the projector IP address. Network discovery has already been attempted.",
+        "title": "Set up Elephas projector"
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "home": {"name": "Home"},
+      "menu": {"name": "Menu"},
+      "sleep": {"name": "Sleep"},
+      "source": {"name": "Source"}
+    }
+  }
+}
