@@ -8,7 +8,15 @@ import socket
 import time
 from collections.abc import Iterable
 
-from .const import CONTROL_PORT, DISCOVERY_PORT, HANDSHAKE_PORT, KEY_PORT
+from .const import (
+    CONTROL_PORT,
+    DISCOVERY_PORT,
+    HANDSHAKE_PORT,
+    KEY_DOWN,
+    KEY_OK,
+    KEY_PORT,
+    KEY_POWER,
+)
 
 DISCOVERY_PAYLOAD = b"control\x14"
 
@@ -56,6 +64,14 @@ class ElephasProjector:
         except (TimeoutError, OSError):
             return False
         return True
+
+    async def async_sleep(self) -> None:
+        """Open the power menu and select its Sleep item."""
+        await self.async_send_key(KEY_POWER)
+        await asyncio.sleep(0.75)
+        await self.async_send_key(KEY_DOWN)
+        await asyncio.sleep(0.3)
+        await self.async_send_key(KEY_OK)
 
 
 async def async_discover_projectors(timeout: float = 2.0) -> set[str]:

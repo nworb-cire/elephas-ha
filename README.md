@@ -25,11 +25,10 @@ discovery does not find it, enter its IP address manually.
 
 ## Power behavior
 
-Power-off has been verified on the target projector. Network power-on works only
-while the projector keeps its network interface awake, normally in sleep mode.
-A fully shut-down Wi-Fi projector requires its physical/Bluetooth remote. An
-Ethernet connection may permit wake if the firmware offers a network-standby or
-Wake-on-LAN setting.
+Power-off and the power-menu Sleep sequence have been verified on the target
+projector. Its Wi-Fi interface turns off even in Sleep, so network wake does not
+work on Wi-Fi; use the physical/Bluetooth remote. Ethernet may permit wake if
+the firmware offers a network-standby or Wake-on-LAN setting.
 
 ## Protocol
 

@@ -73,6 +73,25 @@ class ProtocolTests(unittest.IsolatedAsyncioTestCase):
             protocol.ElephasProjector.async_is_online = original
         self.assertEqual(found, {"192.0.2.2"})
 
+    async def test_sleep_uses_power_menu_sequence(self):
+        client = protocol.ElephasProjector("192.0.2.1")
+        sent = []
+        original_sleep = protocol.asyncio.sleep
+
+        async def fake_send_key(key_code):
+            sent.append(key_code)
+
+        async def fake_sleep(_delay):
+            pass
+
+        client.async_send_key = fake_send_key
+        protocol.asyncio.sleep = fake_sleep
+        try:
+            await client.async_sleep()
+        finally:
+            protocol.asyncio.sleep = original_sleep
+        self.assertEqual(sent, [116, 38, 49])
+
 
 if __name__ == "__main__":
     unittest.main()
