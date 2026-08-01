@@ -37,6 +37,8 @@ async def async_setup_entry(
 
 
 class ElephasButton(ElephasEntity, ButtonEntity):
+    _attr_entity_registry_enabled_default = False
+
     entity_description: ElephasButtonDescription
 
     def __init__(

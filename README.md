@@ -8,7 +8,7 @@ required.
 
 - DHCP discovery for known Elephas hardware, plus UDP/subnet discovery during setup
 - A `media_player` entity with power, volume, and mute controls
-- Sleep, Home, Menu, and Source button entities
+- Optional Sleep, Home, Menu, and Source buttons (disabled by default)
 - A UI config flow and reconfiguration support
 - Fully local communication
 
