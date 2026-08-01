@@ -2,15 +2,21 @@
 
 from __future__ import annotations
 
+import ipaddress
 from typing import Any
 
 import voluptuous as vol
+from homeassistant.components import network
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_HOST
 from homeassistant.helpers.service_info.dhcp import DhcpServiceInfo
 
 from .const import CONF_MAC, DEFAULT_NAME, DOMAIN
-from .protocol import ElephasProjector, async_discover_projectors
+from .protocol import (
+    ElephasProjector,
+    async_discover_projectors,
+    async_scan_projectors,
+)
 
 
 class ElephasConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -38,6 +44,8 @@ class ElephasConfigFlow(ConfigFlow, domain=DOMAIN):
                 )
         else:
             discovered = await async_discover_projectors()
+            if not discovered:
+                discovered = await self._async_scan_local_networks()
             self._discovered_host = next(iter(sorted(discovered)), None)
 
         schema = vol.Schema(
@@ -97,3 +105,18 @@ class ElephasConfigFlow(ConfigFlow, domain=DOMAIN):
             ),
             errors=errors,
         )
+
+    async def _async_scan_local_networks(self) -> set[str]:
+        """Scan at most one /24 per active Home Assistant adapter."""
+        candidates: set[str] = set()
+        for adapter in await network.async_get_adapters(self.hass):
+            if not adapter["enabled"]:
+                continue
+            for configured in adapter["ipv4"]:
+                address = ipaddress.ip_address(configured["address"])
+                if address.is_loopback or address.is_link_local:
+                    continue
+                prefix = max(configured["network_prefix"], 24)
+                subnet = ipaddress.ip_network(f"{address}/{prefix}", strict=False)
+                candidates.update(str(host) for host in subnet.hosts())
+        return await async_scan_projectors(candidates)

@@ -6,6 +6,7 @@ import asyncio
 import json
 import socket
 import time
+from collections.abc import Iterable
 
 from .const import CONTROL_PORT, DISCOVERY_PORT, HANDSHAKE_PORT, KEY_PORT
 
@@ -85,3 +86,17 @@ async def async_discover_projectors(timeout: float = 2.0) -> set[str]:
     finally:
         sock.close()
     return found
+
+
+async def async_scan_projectors(hosts: Iterable[str]) -> set[str]:
+    """Find projectors among candidate LAN addresses with bounded concurrency."""
+    semaphore = asyncio.Semaphore(64)
+
+    async def _probe(host: str) -> str | None:
+        async with semaphore:
+            if await ElephasProjector(host).async_is_online(timeout=0.35):
+                return host
+        return None
+
+    results = await asyncio.gather(*(_probe(host) for host in hosts))
+    return {host for host in results if host is not None}

@@ -6,7 +6,7 @@ required.
 
 ## Features
 
-- DHCP discovery for known Elephas hardware, plus UDP discovery during setup
+- DHCP discovery for known Elephas hardware, plus UDP/subnet discovery during setup
 - A `media_player` entity with power, volume, and mute controls
 - Sleep, Home, Menu, and Source button entities
 - A UI config flow and reconfiguration support

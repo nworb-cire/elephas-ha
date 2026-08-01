@@ -58,6 +58,21 @@ class ProtocolTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(sent[2], (b"KEYSSTATUS:30+0", ("192.0.2.1", 16735)))
         self.assertTrue(fake_socket.closed)
 
+    async def test_scan_returns_only_online_hosts(self):
+        original = protocol.ElephasProjector.async_is_online
+
+        async def fake_is_online(self, timeout=1.0):
+            return self.host.endswith(".2")
+
+        protocol.ElephasProjector.async_is_online = fake_is_online
+        try:
+            found = await protocol.async_scan_projectors(
+                ["192.0.2.1", "192.0.2.2", "192.0.2.3"]
+            )
+        finally:
+            protocol.ElephasProjector.async_is_online = original
+        self.assertEqual(found, {"192.0.2.2"})
+
 
 if __name__ == "__main__":
     unittest.main()
